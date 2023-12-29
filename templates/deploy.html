@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<style>
+    body {
+      background-image: url('https://img.freepik.com/free-photo/city-blue-sky_1417-1867.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1703635200&semt=ais');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      color: white;
+      text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;  
+    }
+</style>
+<html>
+    <h1>Used Car Price Prediction</h1>
+  
+    <body>
+        <div style="width: 100%;">
+            <div style="width: 20%; float: left;"> 
+                <label for="model">Choose a car:</label>
+                <select name="model" id="model">
+                    <option value="Vios">Vios</option>
+                    <option value="Camry">Camry</option>
+                    <option value="Vellfire">Vellfire</option>
+                    <option value="Corolla Altis">Corolla Altis</option>
+                    <option value="Estima">Estima</option>
+                </select>
+                <br><br>
+
+                <label for="series">Car series:</label>
+                <select name="series" id="series">
+                    <option value="G">G</option>
+                    <option value="E">E</option>
+                    <option value="J">J</option>
+                    <option value="V">V</option>
+                    <option value="Z">Z</option>
+                    <option value="Hybrid">Hybrid</option>
+                    <option value="Aeras">Aeras</option>
+                </select>
+                <br><br>
+
+                <label for="manufactured_year">Manufactured Year:</label><br>
+                <input type="number" id="manufactured_year" name="manufactured_year">
+                <br><br>
+
+                <label for="cc">Engine CC:</label><br>
+                <input type="number" id="cc" name="cc">
+                <br><br>
+
+                <label for="width">Width(mm):</label><br>
+                <input type="number" id="width" name="width">
+                <br><br>
+
+                <label for="length">Length(mm):</label><br>
+                <input type="number" id="length" name="length">
+                <br><br>
+
+                <label for="frim">Front Rim (inches):</label><br>
+                <input type="number" id="frim" name="frim">
+                <br><br>
+
+                <label for="rrim">Rear Rim (inches):</label><br>
+                <input type="number" id="rrim" name="rrim">
+                <br><br>
+
+                <label for="weight">Kerb Weight (kg):</label><br>
+                <input type="number" id="weight" name="weight">
+                <br><br>
+
+                <input type="checkbox" id="cd" name="cd">
+                <label for="cd">CD</label>
+                <br>
+        
+                <input type="checkbox" id="immobilizer" name="immobilizer">
+                <label for="immobilizer">Immobilizer</label>
+                <br>
+        
+                <input type="checkbox" id="usb" name="usb">
+                <label for="cd">USB</label>
+                <br>
+        
+                <input type="checkbox" id="parking" name="parking">
+                <label for="parking">Parking sensor</label>
+                <br>
+        
+                <input type="checkbox" id="side" name="side">
+                <label for="side">Side Mirror Turning Indicators</label>
+                <br><br>
+        
+                <button id="btn">Calculate price</button> 
+                <input id="price" name="price">
+            </div>
+            <div style="width: 70%; float: right;">
+                <br><br><br><br><br>
+                <label for="num_gears">Number of Gears:</label><br>
+                <input type="number" id="num_gears" name="num_gears">
+                <br><br>
+
+                <label for="mileage">Mileage:</label><br>
+                <input type="number" id="mileage" name="mileage">
+                <br><br>
+
+                <label for="pp">Peak Power (hp):</label><br>
+                <input type="number" id="pp" name="pp">
+                <br><br>
+
+                <label for="pt">Peak Torque (Nm):</label><br>
+                <input type="number" id="pt" name="pt">
+                <br><br>
+
+                <label for="fthread">Front Thread:</label><br>
+                <input type="number" id="fthread" name="fthread">
+                <br><br>
+
+                <label for="rthread">Rear Thread:</label><br>
+                <input type="number" id="rthread" name="rthread">
+                <br><br>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        const button = document.getElementById('btn');
+        button.addEventListener('click', async _ => {
+        try {     
+            const response = await fetch('predict', {
+            method: 'POST',
+            body: JSON.stringify({
+                model: document.getElementById('model').value,
+                series: document.getElementById('series').value,
+                manufactured_year: document.getElementById('manufactured_year').value,
+                cc: document.getElementById('cc').value,
+                width: document.getElementById('width').value,
+                length: document.getElementById('length').value,
+                frim: document.getElementById('frim').value,
+                rrim: document.getElementById('rrim').value,
+                weight: document.getElementById('weight').value,
+                num_gears: document.getElementById('num_gears').value,
+                mileage: document.getElementById('mileage').value,
+                pp: document.getElementById('pp').value,
+                pt: document.getElementById('pt').value,
+                fthread: document.getElementById('fthread').value,
+                rthread: document.getElementById('rthread').value,
+                CD: document.getElementById('cd').checked,
+                Immobilizer: document.getElementById('immobilizer').checked,
+                USB: document.getElementById('usb').checked,
+                parking: document.getElementById('parking').checked,
+                side: document.getElementById('side').checked
+            }),
+            headers: new Headers({
+            "Content-Type": "application/json"
+            })
+            }).then(response=>response.json())
+            .then(result=> {
+                console.log(result['price']);
+                document.getElementById('price').value = result['price'];
+            });
+        } catch(err) {
+            console.error(`Error: ${err}`);
+        }
+        });
+        
+    </script>
+</html>
